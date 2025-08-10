@@ -10,26 +10,22 @@ import { getGlobalData } from '../utils/global-data';
 import SEO from '../components/SEO';
 import dynamic from "next/dynamic";
 
-// Dynamically import PhaserGame with ssr: false to disable server-side rendering
 const PhaserGame = dynamic(() => import("../components/PhaserGame"), {
-  ssr: false, // Disable SSR for this component
+  ssr: false,
 });
 
 
 export default function Index({ posts, globalData }) {
-  // Step 1: Set up state to track current post index
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Step 2: Define functions to change the index
   const nextPost = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % posts.length); // Loop back to 0 after the last post
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % posts.length);
   };
 
   const prevPost = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + posts.length) % posts.length); // Loop back to the last post if at the first
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + posts.length) % posts.length);
   };
 
-  // Step 3: Render only the current post
   const currentPost = posts[currentIndex];
 
   return (
@@ -51,7 +47,6 @@ export default function Index({ posts, globalData }) {
                 </button>
               </Link>
             </div>
-            {/* Display current post */}
             <ul className="w-full">
               <li
                 key={currentPost.filePath}
@@ -81,7 +76,6 @@ export default function Index({ posts, globalData }) {
               </li>
             </ul>
 
-            {/* Step 4: Add buttons to navigate */}
             <div className="flex justify-start gap-1 mt-4">
               <button
                 onClick={prevPost}

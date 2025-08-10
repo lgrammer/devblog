@@ -5,13 +5,10 @@ import { serialize } from 'next-mdx-remote/serialize';
 import rehypePrism from '@mapbox/rehype-prism';
 import remarkGfm from 'remark-gfm';
 
-// POSTS_PATH is useful when you want to get the path to a specific file
 export const POSTS_PATH = path.join(process.cwd(), 'posts');
 
-// getPostFilePaths is the list of all mdx files inside the POSTS_PATH directory
 export const getPostFilePaths = () => {
   return fs.readdirSync(POSTS_PATH)
-    // Only include md(x) files
     .filter((path) => /\.mdx?$/.test(path));
 };
 
@@ -47,7 +44,6 @@ export const getPostBySlug = async (slug) => {
   const { content, data } = matter(source);
 
   const mdxSource = await serialize(content, {
-    // Optionally pass remark/rehype plugins
     mdxOptions: {
       remarkPlugins: [remarkGfm],
       rehypePlugins: [rehypePrism],
@@ -65,7 +61,6 @@ export const getNextPostBySlug = (slug) => {
   const currentPostIndex = posts.indexOf(currentPost);
 
   const post = posts[currentPostIndex - 1];
-  // no prev post found
   if (!post) return null;
 
   const nextPostSlug = post?.filePath.replace(/\.mdx?$/, '');
@@ -83,7 +78,6 @@ export const getPreviousPostBySlug = (slug) => {
   const currentPostIndex = posts.indexOf(currentPost);
 
   const post = posts[currentPostIndex + 1];
-  // no prev post found
   if (!post) return null;
 
   const previousPostSlug = post?.filePath.replace(/\.mdx?$/, '');

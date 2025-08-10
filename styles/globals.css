@@ -12,8 +12,6 @@ h6 {
   font-family: var(--font-primary);
 }
 
-/* styles/globals.css */
-
 body {
   font-family: var(--font-secondary);
   background-color: #e0f4ff;
