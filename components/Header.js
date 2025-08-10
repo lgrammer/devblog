@@ -87,6 +87,7 @@ export default function Header({ name }) {
     
     <header className="pt-20 pb-12">
       <div className="absolute top-0 left-0 w-full h-[300px] bg-[url('/topcloud.png')] bg-repeat-x z-[-5] bg-[size:auto_50%] opacity-30">
+        {/* This will repeat the image horizontally */}
       </div>
       
       <ThemeSwitcher />
