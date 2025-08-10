@@ -1,107 +1,103 @@
 ---
 type: Post
-title: Next.js Blog Theme Style Guide
+title: The Gnomes Yearn For The Mines
 description: >-
-  A style guide for a website is a set of design standards that define the look,
-  feel, and behavior of a digital product, ensuring consistency and cohesion
-  across all pages and elements.
-date: '2025-01-06'
+  Since I didn't know what to put in this blog to get it started, I decided to build a gnome themed minigame on my homepage and document it.
 ---
-A style guide for a website is a set of design standards that define the look, feel, and behavior of a digital product, ensuring consistency and cohesion across all pages and elements. It typically includes guidelines for colors, typography, spacing, buttons, icons, and imagery, as well as instructions on voice and tone for content.
 
-# h1 Heading
+### The Stack
 
-## h2 Heading
+While I could use some framework or engine that spits out WASM, I decided that would be overkill for the scope of this project.
 
-### h3 Heading
+At the same time writing everything with just plain JavaScript seemed a bit boring.
 
-#### h4 Heading
+I decided it could be fun to try integrating a JavaScript game framework like PhaserJS with NextJS. This allows me to create a little miniengine for my minigame using just canvas and JAMstack.
 
-##### h5 Heading
+I went with this <a>starter template</a> to kick things off. My goal for now is to create a simple blog homepage and slap a canvas over the entire background.
 
-###### h6 Heading
+After bootstrapping the starter and adding a little custom styling I ended up with something like this:
 
-## Horizontal Rules
+<img src="/images/gamescenehomepagething.png" alt="Homepage" style={{ maxWidth: '100%', height: 'auto' }} />
 
-***
+My blog now has a nice little 2D "skybox" of sorts. I plan on removing background color from my canvas leaving it transparent. This will leave control over the background coloring up to my NextJS dark/light mode instead of in the Phaser canvas.
 
-## Emphasis
+Phaser comes with a nice "event bus" system if I ever need to control that from the minigame.
 
-**This is bold text**
+### The Canvas
 
-**This is bold text**
+Next up I want to set my canvas to fit my browsers inner size.
 
-*This is italic text*
+It took a little tinkering but these CSS and Phaser config settings seemed to do the trick for me.
 
-*This is italic text*
-
-~~Strikethrough~~
-
-## Blockquotes
-
-> Blockquotes can also be nested...
->
-> > ...by using additional greater-than signs right next to each other...
-> >
-> > > ...or with spaces between arrows.
-
-## Lists
-
-Unordered
-
-*   Lorem ipsum dolor sit amet
-*   Consectetur adipiscing elit
-*   Integer molestie lorem at massa
-
-Ordered
-
-1.  Lorem ipsum dolor sit amet
-2.  Consectetur adipiscing elit
-3.  Integer molestie lorem at massa
-
-## Code
-
-Inline `code`
-
-Block code
-
+```css
+canvas {
+  position: absolute;
+  border: 2px solid red;
+  top: 0;
+  left: 0;
+  z-index: -10;
+}
 ```
-npm install netlify-cli -g
-```
-
-Syntax highlighting
-
 ```js
-var foo = function (bar) {
-  return bar++;
+import { useEffect } from "react";
+import Phaser from "phaser";
+
+const PhaserGame = () => {
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const gameWidth = window.innerWidth;
+      const gameHeight = window.innerHeight;
+      let bgColor = "#e0f4ff";
+
+      var config = {
+        type: Phaser.AUTO,
+  
+        scene: {
+          preload: preload,
+          create: create,
+          update: update,
+        },
+        scale: {
+          mode: Phaser.Scale.ENVELOP,
+          autoCenter: Phaser.Scale.CENTER_BOTH,
+          width: gameWidth,
+          height: gameHeight,
+        },
+        backgroundColor: bgColor,
+        transparent: true,
+      };
+
+      const game = new Phaser.Game(config);
+
+      function preload() {
+      }
+
+      function create() {
+      }
+
+      function update() {
+      }
+
+      return () => {
+        game.destroy(true);
+      };
+    }
+  }, []);
+
+  return <div id="game-container" className="game-container"></div>;
 };
 
-console.log(foo(5));
+export default PhaserGame;
 ```
 
-## Tables
+In my CSS I added a red border for debugging purposes. This will help me with visualizing and debugging the transparent canvas. I also added a div with a red border around the PhaserGame component, so you can see where that actually exists.
 
-| Option | Description                                                               |
-| ------ | ------------------------------------------------------------------------- |
-| data   | path to data files to supply the data that will be passed into templates. |
-| engine | engine to be used for processing templates. Handlebars is the default.    |
-| ext    | extension to be used for dest files.                                      |
+<img src="/images/gamecanvas.png" alt="Homepage" style={{ maxWidth: '100%', height: 'auto' }} />
 
-Right aligned columns
+I then went and tested some sprite positioning, placing some orbs in the corners of my canvas, as well as some ground.
 
-| Option |                                                               Description |
-| -----: | ------------------------------------------------------------------------: |
-|   data | path to data files to supply the data that will be passed into templates. |
-| engine |    engine to be used for processing templates. Handlebars is the default. |
-|    ext |                                      extension to be used for dest files. |
+The weird orbs are also just for a final bit of debugging the canvas size, this time with objects inside the canvas.
 
-## Links
+<img src="/images/firstsceneobjects.png" alt="Homepage" style={{ maxWidth: '100%', height: 'auto' }} />
 
-*   [Next.js on Netlify](https://docs.netlify.com/frameworks/next-js/overview/)
-*   [Use Visual Editor with Next.js](https://docs.netlify.com/visual-editor/frameworks/next/)
-
-## Image
-
-Recommended image orientation is horizontal. You can adjust the image component to your needs in `components/CustomImage.js`.
-
-![Image alt text](/images/random-image.jpeg "Image Title")
+Everything looks good, now we can move onto getting a player character 

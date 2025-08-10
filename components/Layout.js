@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { useEffect } from 'react';
+import { useRouter } from 'next/router'; // Import useRouter hook
 import styles from './Layout.module.css';
 
 export function GradientBackground({ variant, className }) {
@@ -15,6 +16,7 @@ export function GradientBackground({ variant, className }) {
 }
 
 export default function Layout({ children }) {
+  const router = useRouter(); // Initialize the router
   const setAppTheme = () => {
     const darkMode = localStorage.getItem('theme') === 'dark';
     const lightMode = localStorage.getItem('theme') === 'light';
@@ -28,26 +30,47 @@ export default function Layout({ children }) {
   };
 
   const handleSystemThemeChange = () => {
-    var darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-    darkQuery.onchange = (e) => {
+    const setTheme = (e) => {
       if (e.matches) {
         document.documentElement.classList.add('dark');
         localStorage.setItem('theme', 'dark');
       } else {
         document.documentElement.classList.remove('dark');
         localStorage.setItem('theme', 'light');
-      }
+      }      
     };
+
+    darkQuery.addEventListener('change', setTheme);    
+
+    return () => darkQuery.removeEventListener('change', setTheme);
   };
 
   useEffect(() => {
     setAppTheme();
   }, []);
 
-  useEffect(() => {
-    handleSystemThemeChange();
+  useEffect(() => {    
+    return handleSystemThemeChange();
   }, []);
+
+  useEffect(() => {
+    // Apply styles to the body if we're on the homepage
+    if (router.pathname === '/') {
+      document.body.style.overflow = 'hidden';
+      document.body.style.height = '100%';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.height = '';
+    }
+
+    // Cleanup styles on component unmount or route change
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.height = '';
+    };
+  }, [router.pathname]); // Run effect when route changes
 
   return (
     <div className="relative pb-24 overflow-hidden">

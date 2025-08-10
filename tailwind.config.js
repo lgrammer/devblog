@@ -6,4 +6,11 @@ module.exports = {
   ],
   darkMode: 'class', // or 'media' or 'class'
   presets: [require('./utils/tailwind-preset')],
+  theme: {
+    extend: {
+      colors: {
+        'blue-white': '#e0f4ff', // Your slightly tinted blue-white color
+      },
+    },
+  },
 };
