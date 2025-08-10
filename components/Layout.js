@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { useEffect } from 'react';
-import { useRouter } from 'next/router'; // Import useRouter hook
+import { useRouter } from 'next/router';
 import styles from './Layout.module.css';
 
 export function GradientBackground({ variant, className }) {
@@ -16,7 +16,7 @@ export function GradientBackground({ variant, className }) {
 }
 
 export default function Layout({ children }) {
-  const router = useRouter(); // Initialize the router
+  const router = useRouter();
   const setAppTheme = () => {
     const darkMode = localStorage.getItem('theme') === 'dark';
     const lightMode = localStorage.getItem('theme') === 'light';
@@ -56,7 +56,6 @@ export default function Layout({ children }) {
   }, []);
 
   useEffect(() => {
-    // Apply styles to the body if we're on the homepage
     if (router.pathname === '/') {
       document.body.style.overflow = 'hidden';
       document.body.style.height = '100%';
@@ -65,12 +64,11 @@ export default function Layout({ children }) {
       document.body.style.height = '';
     }
 
-    // Cleanup styles on component unmount or route change
     return () => {
       document.body.style.overflow = '';
       document.body.style.height = '';
     };
-  }, [router.pathname]); // Run effect when route changes
+  }, [router.pathname]);
 
   return (
     <div className="relative pb-24 overflow-hidden">

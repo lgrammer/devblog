@@ -31,7 +31,7 @@ const PhaserGame = () => {
       const game = new Phaser.Game(config);
       function preload() {
         this.load.image('sporeCloud', 'assets/sporeCloud.png');
-        this.load.image('grass', 'assets/grass.png'); // Load the grass image
+        this.load.image('grass', 'assets/grass.png');
       }
       
       function create() {
@@ -43,7 +43,6 @@ const PhaserGame = () => {
       }
       
       function update() {
-        // You can add logic to animate or interact with the grass, but it's not necessary for this task.
       }
       return () => {
         game.destroy(true);
